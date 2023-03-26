@@ -1,0 +1,18 @@
+#!/usr/bin/env php
+<?php
+
+namespace Shimoning\PostalCustomerBarcode;
+
+require_once __DIR__ . '/vendor/autoload.php';
+
+// display welcome message
+echo __NAMESPACE__ . " shell\n";
+echo "-----\nexample:\n";
+echo "Extractor::extract('0 6 5 0 0 0 6 ', '北海道札幌市東区北六条東8丁目　郵便センター10号館');\n";
+
+// run shell
+$sh = new \Psy\Shell();
+$sh->addCode(sprintf("namespace %s;", __NAMESPACE__));
+$sh->run();
+
+echo "\n-----\nBye.\n\n";

@@ -1,0 +1,37 @@
+{
+    "name": "shimoning/postal-customer-barcode",
+    "type": "library",
+    "description": "Japan Postal Customer barcode",
+    "keywords": [
+        "postal",
+        "Postal code",
+        "customer barcode",
+        "barcode"
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "version": "0.0.1",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Shimon Haga",
+            "email": "shimon.haga@shimoning.com"
+        }
+    ],
+    "require": {
+        "php": "^8.1"
+    },
+    "require-dev": {
+        "psy/psysh": "^0.11.15"
+    },
+    "autoload": {
+        "psr-4": {
+            "Shimoning\\PostalCustomerBarcode\\": "src/"
+        }
+    },
+    "scripts": {
+        "client": [
+            "@php client"
+        ]
+    }
+}
