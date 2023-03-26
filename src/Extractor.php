@@ -12,9 +12,9 @@ class Extractor
      *
      * @param string|integer $zipCode
      * @param string $address
-     * @return string
+     * @return string|false
      */
-    public static function extract(string|int $zipCode, string $address): string
+    public static function extract(string|int $zipCode, string $address): string|bool
     {
         // 郵便番号から情報を抜き出す
         $zipCode = static::extractNumber($zipCode);

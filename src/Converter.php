@@ -20,9 +20,9 @@ class Converter
      * バーに変換
      *
      * @param string $data
-     * @return Bar[]
+     * @return Bar[]|false
      */
-    static public function convert(string $data): array
+    static public function convert(string $data): array|bool
     {
         if (!\preg_match('/\A[0-9A-Z-]+\z/', $data)) {
             // TODO: throw exception

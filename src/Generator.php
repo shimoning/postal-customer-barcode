@@ -20,12 +20,16 @@ class Generator
      *
      * @param string|integer $zipCode
      * @param string $address
-     * @return void
+     * @param array|null $options
+     * @return string|false
      */
-    public static function png(string|int $zipCode, string $address, $options = null)
+    public static function png(string|int $zipCode, string $address, $options = null): string|bool
     {
         $data = Extractor::extract($zipCode, $address);
         $bars = Converter::convert($data);
+        if (!$bars) {
+            return false;
+        }
 
         $widthFactor = $options['width_factor'] ?? self::DEFAULT_WIDTH_FACTOR;
         $fgRgb = $options['foreground_rgb'] ?? self::DEFAULT_FOREGROUND_RGB;
