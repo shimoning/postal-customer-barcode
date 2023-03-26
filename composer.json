@@ -1,16 +1,17 @@
 {
     "name": "shimoning/postal-customer-barcode",
     "type": "library",
-    "description": "Japan Postal Customer barcode",
+    "description": "Japan Postal Customer Barcode",
     "keywords": [
         "postal",
         "Postal code",
+        "zip code",
         "customer barcode",
         "barcode"
     ],
     "minimum-stability": "dev",
     "prefer-stable": true,
-    "version": "0.0.1",
+    "version": "0.0.2",
     "license": "MIT",
     "authors": [
         {
@@ -22,7 +23,8 @@
         "php": "^8.1"
     },
     "require-dev": {
-        "psy/psysh": "^0.11.15"
+        "psy/psysh": "^0.11.15",
+        "phpunit/phpunit": "^10.1"
     },
     "autoload": {
         "psr-4": {
@@ -32,6 +34,9 @@
     "scripts": {
         "client": [
             "@php client"
+        ],
+        "test": [
+            "vendor/bin/phpunit"
         ]
     }
 }

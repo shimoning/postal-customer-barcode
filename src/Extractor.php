@@ -2,6 +2,9 @@
 
 namespace Shimoning\PostalCustomerBarcode;
 
+/**
+ * バーコードに必要な文字情報を抜き出す
+ */
 class Extractor
 {
     /**

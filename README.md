@@ -1,5 +1,5 @@
 # Japan Postal Customer Barcode
-郵便番号を含む住所を郵便局向けのカスタマバーコードに変換する
+郵便番号と住所を郵便局向けのカスタマバーコードに変換する
 
 
 ## Install
@@ -19,9 +19,11 @@
 composer require shimoning/postal-customer-barcode
 ```
 
-
 ## Usage
 TODO: write
+### Extractor
+郵便番号と住所からバーコードに必要な情報を抜き出す
+[公式](https://www.post.japanpost.jp/zipcode/zipmanual/p17.html)
 
 
 ## CLI
@@ -31,12 +33,7 @@ php client
 ```
 
 ### 終了方法
-終了する際は `exit` もしくは `Control + C` を入力してください。
-
-### .env
-`.env` ファイルを用意することで、`$options` と `$input` がデフォルトでセットされます。
-ファイルの中身は `.env.example` を参考にしてください。
-またコマンドライン中で `$_ENV['USER_ID']` と呼び出すことが可能です。
+`exit` もしくは `Control + C` を入力してください。
 
 ## ライセンスについて
 当ライブラリは *MITライセンス* です。
