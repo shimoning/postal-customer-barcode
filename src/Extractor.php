@@ -12,9 +12,9 @@ class Extractor
      *
      * @param string|integer $zipCode
      * @param string $address
-     * @return void
+     * @return string
      */
-    public static function extract(string|int $zipCode, string $address)
+    public static function extract(string|int $zipCode, string $address): string
     {
         // 郵便番号から情報を抜き出す
         $zipCode = static::extractNumber($zipCode);
@@ -121,12 +121,12 @@ class Extractor
         );
     }
 
-    public static function extractNumber(string $numeric)
+    public static function extractNumber(string $numeric): string
     {
         return \preg_replace('/[^0-9]/u', '', \mb_convert_kana($numeric, 'n'));
     }
 
-    public static function isZipCode(string|int $zipCode)
+    public static function isZipCode(string|int $zipCode): bool
     {
         return \preg_match('/\A[0-9]{3}-?[0-9]{4}\z/', $zipCode) === 1;
     }

@@ -20,4 +20,15 @@ enum Bar: int
             self::TIMING            => 2,
         };
     }
+
+    public function position(): int
+    {
+        return match ($this) {
+            self::NONE              => 0,
+            self::LONG              => 0,
+            self::SEMI_LONG_TOP     => 0,
+            self::SEMI_LONG_BOTTOM  => 2,
+            self::TIMING            => 2,
+        };
+    }
 }
