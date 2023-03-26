@@ -9,6 +9,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 echo __NAMESPACE__ . " shell\n";
 echo "-----\nexample:\n";
 echo "Extractor::extract('0 6 5 0 0 0 6 ', '北海道札幌市東区北六条東8丁目　郵便センター10号館');\n";
+echo "Converter::convert('91000673-80-25J1-2B');\n";
 
 // run shell
 $sh = new \Psy\Shell();
