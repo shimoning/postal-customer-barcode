@@ -94,10 +94,11 @@ class Converter
         foreach ($characters as $character) {
             $sum += $character->toInt();
         }
-        $div = \floor($sum / 19);
+        $div = \intval(\floor($sum / 19));
         $checkDigit = ($div + 1) * 19 - $sum;
+
         return $checkDigit > 10
-            ? Control::tryFrom((string)$checkDigit)
-            : Number::tryFrom((string)$checkDigit);
+            ? Control::fromInt($checkDigit)
+            : Number::fromInt($checkDigit);
     }
 }

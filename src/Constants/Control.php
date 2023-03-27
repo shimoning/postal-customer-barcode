@@ -50,4 +50,18 @@ enum Control: string
             self::CC8   => 18,
         };
     }
+
+    static public function fromInt(int $number): self
+    {
+        return match ($number) {
+            11 => self::CC1,
+            12 => self::CC2,
+            13 => self::CC3,
+            14 => self::CC4,
+            15 => self::CC5,
+            16 => self::CC6,
+            17 => self::CC7,
+            18 => self::CC8,
+        };
+    }
 }
