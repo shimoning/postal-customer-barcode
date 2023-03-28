@@ -13,7 +13,7 @@ enum Control: string
     case CC7    = 'CC7';
     case CC8    = 'CC8';
     case START  = 'STC';
-    case END    = 'SPC';
+    case STOP   = 'SPC';
 
     /**
      * @return Bar[]
@@ -30,7 +30,7 @@ enum Control: string
             self::CC7   => [ Bar::TIMING, Bar::TIMING, Bar::LONG ],
             self::CC8   => [ Bar::LONG, Bar::LONG, Bar::LONG ],
             self::START => [ Bar::NONE, Bar::LONG, Bar::SEMI_LONG_BOTTOM ],
-            self::END   => [ Bar::SEMI_LONG_BOTTOM, Bar::LONG, Bar::NONE ],
+            self::STOP  => [ Bar::SEMI_LONG_BOTTOM, Bar::LONG, Bar::NONE ],
         };
     }
 

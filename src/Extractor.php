@@ -108,7 +108,6 @@ class Extractor
 
         // n十m の時は n を取り出す
         $numericKanji = preg_replace('/([一二三四五六七八九]+)十/u', '$1', $numericKanji);
-        // var_dump($numericKanji);exit;
 
         // 十n の時
         $numericKanji = preg_replace('/十([一二三四五六七八九]+)/u', '1$1', $numericKanji);

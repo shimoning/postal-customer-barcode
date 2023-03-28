@@ -24,13 +24,32 @@ class Converter
      */
     static public function convert(string $data): array|bool
     {
-        if (!\preg_match('/\A[0-9A-Z-]+\z/', $data)) {
-            // TODO: throw exception
+        $codes = self::data2Codes($data);
+        if (! $codes) {
             return false;
         }
 
+        // バーに変換する
+        $bars = [];
+        foreach ($codes as $code) {
+            array_push($bars, ...$code->barMap());
+        }
+        return $bars;
+    }
+
+    /**
+     * 数字の文字列データをコードの配列にする
+     *
+     * @param string $data
+     * @return (Number|Control)[]|false
+     */
+    static public function data2Codes(string $data): array|bool
+    {
         // 1文字ずつ分解
-        $characters = \str_split($data);
+        $characters = self::data2Array($data);
+        if (! $characters) {
+            return false;
+        }
 
         // 形式を整える
         $formatted = self::format($characters);
@@ -39,23 +58,32 @@ class Converter
         $checkDigit = self::checkDigit($formatted);
 
         // 先頭に STC を加える
-        \array_unshift($formatted, Control::START);
+        return self::addControls($formatted, $checkDigit);
+    }
 
-        // 末尾にチェックデジットと SPC を加える
-        $formatted[] = $checkDigit;
-        $formatted[] = Control::END;
-
-        // バーに変換する
-        $bars = [];
-        foreach ($formatted as $code) {
-            array_push($bars, ...$code->barMap());
+    /**
+     * 文字列を配列に変換
+     *
+     * @param string $data
+     * @return string[]
+     */
+    static public function data2Array(string $data): array|bool
+    {
+        if (!\preg_match('/\A[0-9A-Z-]+\z/', $data)) {
+            // TODO: throw exception
+            return false;
         }
-        return $bars;
+
+        // 1文字ずつ分解
+        $characters = \str_split($data);
+
+        return $characters;
     }
 
     /**
      * 形式を整える
      *
+     * @link https://www.post.japanpost.jp/zipcode/zipmanual/p20.html
      * @param string[] $characters
      * @return (Number|Control)[] $characters
      */
@@ -88,7 +116,7 @@ class Converter
      * @param (Number|Control)[] $characters
      * @return Number|Control
      */
-    static public function checkDigit(array $characters)
+    static public function checkDigit(array $characters): Number|Control
     {
         $sum = 0;
         foreach ($characters as $character) {
@@ -96,9 +124,30 @@ class Converter
         }
         $div = \intval(\floor($sum / 19));
         $checkDigit = ($div + 1) * 19 - $sum;
+        if ($checkDigit >= 19) {
+            $checkDigit -= 19;
+        }
 
         return $checkDigit > 10
             ? Control::fromInt($checkDigit)
             : Number::fromInt($checkDigit);
+    }
+
+    /**
+     * スタートコードやストップコード
+     *
+     * @param (Number|Control)[] $characters
+     * @param Number|Control $checkDigit
+     * @return (Number|Control)[]
+     */
+    static public function addControls(array $characters, Number|Control $checkDigit): array
+    {
+        // 先頭に STC を加える
+        \array_unshift($characters, Control::START);
+
+        // 末尾にチェックデジットと SPC を加える
+        $characters[] = $checkDigit;
+        $characters[] = Control::STOP;
+        return $characters;
     }
 }
