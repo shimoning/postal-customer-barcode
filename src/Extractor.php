@@ -18,7 +18,7 @@ class Extractor
     {
         // 郵便番号から情報を抜き出す
         $zipCode = static::extractNumber($zipCode);
-        if (!static::isZipCode($zipCode)) {
+        if (! static::isZipCode($zipCode)) {
             // TODO: throw exception
             return false;
         }
@@ -26,6 +26,19 @@ class Extractor
         // 住所から情報を抜き出す
         $addressB = static::extractAddressB($address);  // 不要かも？
         return $zipCode . static::extractFromAddressB($addressB);
+    }
+
+    /**
+     * 住所から 住所A(町域名までの住所) を削除し 住所B(町域名以降の住所) だけ取り出す。
+     *
+     * @link https://www.post.japanpost.jp/zipcode/zipmanual/p18.html
+     * @param string $address
+     * @return string
+     */
+    public static function extractAddressB(string $address): string
+    {
+        // TODO: 北海道以外のケース
+        return \preg_replace('/\A北海道札幌市(.+?)区(東|西|南|北)(.+?)条/u', '', \trim($address));
     }
 
     /**
@@ -76,19 +89,6 @@ class Extractor
     }
 
     /**
-     * 住所から 住所A(町域名までの住所) を削除し 住所B(町域名以降の住所) だけ取り出す。
-     *
-     * @link https://www.post.japanpost.jp/zipcode/zipmanual/p18.html
-     * @param string $address
-     * @return string
-     */
-    public static function extractAddressB(string $address): string
-    {
-        // TODO: 北海道以外のケース
-        return \preg_replace('/\A北海道札幌市(.+?)区(東|西|南|北)(.+?)条/u', '', \trim($address));
-    }
-
-    /**
      * 住所に含まれる漢数字を数字にする
      * TODO: 百以上の漢数字
      *
@@ -102,14 +102,14 @@ class Extractor
             return 10;
         }
 
-        // n十 (一旦、十 を x に置き換える)
+        // n十 の時は n0 にする (一旦、十 を x に置き換える)
         $numericKanji = \preg_replace('/([一二三四五六七八九]+)十\z/u', '$1x', $numericKanji);
-        $numericKanji = \str_replace('x', '0', $numericKanji);
+        $numericKanji = \str_replace('x', '0', $numericKanji); // x を 0 に戻す
 
-        // n十m の時は n を取り出す
+        // n十m の時は nmにする
         $numericKanji = preg_replace('/([一二三四五六七八九]+)十/u', '$1', $numericKanji);
 
-        // 十n の時
+        // 十m の時は 1m にする
         $numericKanji = preg_replace('/十([一二三四五六七八九]+)/u', '1$1', $numericKanji);
 
         // 単体の漢数字
@@ -120,11 +120,23 @@ class Extractor
         );
     }
 
+    /**
+     * 文字列から半角数字を取り出す
+     *
+     * @param string $numeric
+     * @return string
+     */
     public static function extractNumber(string $numeric): string
     {
         return \preg_replace('/[^0-9]/u', '', \mb_convert_kana($numeric, 'n'));
     }
 
+    /**
+     * 郵便番号かどうかをチェックする
+     *
+     * @param string|integer $zipCode
+     * @return boolean
+     */
     public static function isZipCode(string|int $zipCode): bool
     {
         return \preg_match('/\A[0-9]{3}-?[0-9]{4}\z/', $zipCode) === 1;
