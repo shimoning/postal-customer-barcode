@@ -2,10 +2,14 @@
 
 use PHPUnit\Framework\TestCase;
 use Shimoning\PostalCustomerBarcode\Extractor;
+use Shimoning\PostalCustomerBarcode\Exceptions\InvalidZipCodeException;
+use Shimoning\PostalCustomerBarcode\Exceptions\InvalidAddressException;
 
 class ExtractorTest extends TestCase
 {
     /**
+     * 公式に載っているテスト
+     *
      * @link https://www.post.japanpost.jp/zipcode/zipmanual/p25.html
      * @return void
      */
@@ -15,6 +19,20 @@ class ExtractorTest extends TestCase
             $result = Extractor::extract($case['zip_code'], $case['address']);
             $this->assertEquals(\preg_replace('[\s]', '', $case['extracted']), $result);
         }
+    }
+
+    public function test_extractZipCodeFalsy()
+    {
+        $this->expectException(InvalidZipCodeException::class);
+        $this->expectExceptionMessage('郵便番号が正しくありません。');
+        Extractor::extract('aiueo', 'test');
+    }
+
+    public function test_extractAddressFalsy()
+    {
+        $this->expectException(InvalidAddressException::class);
+        $this->expectExceptionMessage('住所が空です。');
+        Extractor::extract('123-4567', '');
     }
 
     public function test_extractNumber()
@@ -93,6 +111,12 @@ class ExtractorTest extends TestCase
         }
     }
 
+    /**
+     * テストケース
+     *
+     * @link https://www.post.japanpost.jp/zipcode/zipmanual/p25.html
+     * @var array
+     */
     private $cases = [
         [
             'zip_code' => '2 6 3 0 0 2 3',

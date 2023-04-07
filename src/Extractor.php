@@ -2,6 +2,9 @@
 
 namespace Shimoning\PostalCustomerBarcode;
 
+use Shimoning\PostalCustomerBarcode\Exceptions\InvalidZipCodeException;
+use Shimoning\PostalCustomerBarcode\Exceptions\InvalidAddressException;
+
 /**
  * バーコードに必要な文字情報を抜き出す
  */
@@ -12,19 +15,24 @@ class Extractor
      *
      * @param string|integer $zipCode
      * @param string $address
-     * @return string|false
+     * @throws InvalidZipCodeException
+     * @throws InvalidAddressException
+     * @return string
      */
-    public static function extract(string|int $zipCode, string $address): string|bool
+    public static function extract(string|int $zipCode, string $address): string
     {
         // 郵便番号から情報を抜き出す
         $zipCode = static::extractNumber($zipCode);
         if (! static::isZipCode($zipCode)) {
-            // TODO: throw exception
-            return false;
+            throw new InvalidZipCodeException('郵便番号が正しくありません。');
         }
 
         // 住所から情報を抜き出す
         $addressB = static::extractAddressB($address);  // 不要かも？
+        if (empty($addressB)) {
+            // TODO: 空でも良いかもしれない
+            throw new InvalidAddressException('住所が空です。');
+        }
         return $zipCode . static::extractFromAddressB($addressB);
     }
 

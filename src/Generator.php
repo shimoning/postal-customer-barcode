@@ -4,6 +4,9 @@ namespace Shimoning\PostalCustomerBarcode;
 
 use Shimoning\PostalCustomerBarcode\Constants\Bar;
 use Shimoning\PostalCustomerBarcode\Constants\ImageLibrary;
+use Shimoning\PostalCustomerBarcode\Exceptions\InvalidZipCodeException;
+use Shimoning\PostalCustomerBarcode\Exceptions\InvalidAddressException;
+use Shimoning\PostalCustomerBarcode\Exceptions\InvalidCodableStringException;
 
 /**
  * バーコードを出力する
@@ -21,15 +24,15 @@ class Generator
      * @param string|integer $zipCode
      * @param string $address
      * @param array|null $options
+     * @throws InvalidZipCodeException
+     * @throws InvalidAddressException
+     * @throws InvalidCodableStringException
      * @return string|false
      */
     public static function png(string|int $zipCode, string $address, $options = null): string|bool
     {
         $data = Extractor::extract($zipCode, $address);
         $bars = Converter::convert($data);
-        if (!$bars) {
-            return false;
-        }
 
         $widthFactor = $options['width_factor'] ?? self::DEFAULT_WIDTH_FACTOR;
         $fgRgb = $options['foreground_rgb'] ?? self::DEFAULT_FOREGROUND_RGB;

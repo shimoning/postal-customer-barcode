@@ -8,4 +8,4 @@ Thumbs.db
 .vscode
 
 *.log
-.phpunit.result.cache
+.phpunit.cache

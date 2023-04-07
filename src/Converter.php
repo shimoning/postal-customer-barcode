@@ -6,6 +6,7 @@ use Shimoning\PostalCustomerBarcode\Constants\Bar;
 use Shimoning\PostalCustomerBarcode\Constants\Number;
 use Shimoning\PostalCustomerBarcode\Constants\Control;
 use Shimoning\PostalCustomerBarcode\Constants\Alphabet;
+use Shimoning\PostalCustomerBarcode\Exceptions\InvalidCodableStringException;
 
 /**
  * 英数字をバーコード用のコードに変換する
@@ -20,14 +21,13 @@ class Converter
      * バーに変換
      *
      * @param string $data
-     * @return Bar[]|false
+     * @throws InvalidCodableStringException
+     * @return Bar[]
      */
-    static public function convert(string $data): array|bool
+    static public function convert(string $data): array
     {
+        // コードに変換
         $codes = self::data2Codes($data);
-        if (! $codes) {
-            return false;
-        }
 
         // バーに変換する
         $bars = [];
@@ -41,15 +41,12 @@ class Converter
      * 数字の文字列データをコードの配列にする
      *
      * @param string $data
-     * @return (Number|Control)[]|false
+     * @return (Number|Control)[]
      */
-    static public function data2Codes(string $data): array|bool
+    static public function data2Codes(string $data): array
     {
         // 1文字ずつ分解
         $characters = self::data2Array($data);
-        if (! $characters) {
-            return false;
-        }
 
         // 形式を整える
         $formatted = self::format($characters);
@@ -65,19 +62,15 @@ class Converter
      * 文字列を配列に変換
      *
      * @param string $data
+     * @throws InvalidCodableStringException
      * @return string[]
      */
-    static public function data2Array(string $data): array|bool
+    static public function data2Array(string $data): array
     {
         if (!\preg_match('/\A[0-9A-Z-]+\z/', $data)) {
-            // TODO: throw exception
-            return false;
+            throw new InvalidCodableStringException('半角英数とハイフンのみ入力可能です。');
         }
-
-        // 1文字ずつ分解
-        $characters = \str_split($data);
-
-        return $characters;
+        return \str_split($data);
     }
 
     /**
